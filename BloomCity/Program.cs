@@ -1,3 +1,5 @@
+using BloomCity.Forms;
+
 namespace BloomCity
 {
     internal static class Program
