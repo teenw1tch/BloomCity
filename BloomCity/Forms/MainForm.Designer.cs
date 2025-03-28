@@ -86,7 +86,9 @@
             pictureBox10 = new PictureBox();
             labelProductName10 = new Label();
             comboBoxCategories = new ComboBox();
-            label18 = new Label();
+            label1 = new Label();
+            comboBoxSort = new ComboBox();
+            label3 = new Label();
             flowLayoutPanelProducts.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -137,7 +139,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Verdana", 12F);
             label2.ForeColor = SystemColors.ActiveCaption;
-            label2.Location = new Point(370, 8);
+            label2.Location = new Point(370, 9);
             label2.Name = "label2";
             label2.Size = new Size(84, 25);
             label2.TabIndex = 8;
@@ -147,7 +149,7 @@
             // 
             textBoxPhone.Font = new Font("Verdana", 7.8F);
             textBoxPhone.ForeColor = SystemColors.ActiveCaption;
-            textBoxPhone.Location = new Point(460, 8);
+            textBoxPhone.Location = new Point(460, 9);
             textBoxPhone.Multiline = true;
             textBoxPhone.Name = "textBoxPhone";
             textBoxPhone.Size = new Size(265, 26);
@@ -156,7 +158,7 @@
             // buttonSearch
             // 
             buttonSearch.Image = Properties.Resources.SearchIcon1;
-            buttonSearch.Location = new Point(731, 0);
+            buttonSearch.Location = new Point(731, 1);
             buttonSearch.Name = "buttonSearch";
             buttonSearch.Size = new Size(47, 44);
             buttonSearch.TabIndex = 10;
@@ -739,22 +741,44 @@
             comboBoxCategories.Font = new Font("Verdana", 7.8F);
             comboBoxCategories.ForeColor = SystemColors.ActiveCaption;
             comboBoxCategories.FormattingEnabled = true;
-            comboBoxCategories.Location = new Point(12, 103);
+            comboBoxCategories.Location = new Point(0, 211);
             comboBoxCategories.Name = "comboBoxCategories";
-            comboBoxCategories.Size = new Size(182, 24);
+            comboBoxCategories.Size = new Size(202, 24);
             comboBoxCategories.TabIndex = 12;
             // 
-            // label18
+            // label1
             // 
-            label18.AutoSize = true;
-            label18.Font = new Font("Verdana", 7.8F);
-            label18.ForeColor = SystemColors.ActiveCaption;
-            label18.Location = new Point(8, 68);
-            label18.Name = "label18";
-            label18.Size = new Size(186, 32);
-            label18.TabIndex = 13;
-            label18.Text = "Выберите интересующую \r\nкатегорию:";
-            label18.TextAlign = ContentAlignment.MiddleCenter;
+            label1.AutoSize = true;
+            label1.Font = new Font("Verdana", 7.8F);
+            label1.ForeColor = SystemColors.ActiveCaption;
+            label1.Location = new Point(8, 176);
+            label1.Name = "label1";
+            label1.Size = new Size(186, 32);
+            label1.TabIndex = 13;
+            label1.Text = "Выберите интересующую \r\nкатегорию:";
+            label1.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // comboBoxSort
+            // 
+            comboBoxSort.Font = new Font("Verdana", 7.8F);
+            comboBoxSort.ForeColor = SystemColors.ActiveCaption;
+            comboBoxSort.FormattingEnabled = true;
+            comboBoxSort.Location = new Point(0, 19);
+            comboBoxSort.Name = "comboBoxSort";
+            comboBoxSort.Size = new Size(202, 24);
+            comboBoxSort.TabIndex = 14;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Verdana", 7.8F);
+            label3.ForeColor = SystemColors.ActiveCaption;
+            label3.Location = new Point(27, 1);
+            label3.Name = "label3";
+            label3.Size = new Size(136, 16);
+            label3.TabIndex = 15;
+            label3.Text = "Отсортировать по:";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -763,7 +787,9 @@
             BackgroundImage = Properties.Resources.Background__freepik_;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1136, 629);
-            Controls.Add(label18);
+            Controls.Add(label3);
+            Controls.Add(comboBoxSort);
+            Controls.Add(label1);
             Controls.Add(comboBoxCategories);
             Controls.Add(buttonSearch);
             Controls.Add(textBoxPhone);
@@ -865,11 +891,13 @@
         private Label labelProductPrice9;
         private PictureBox pictureBox9;
         private Label labelProductName9;
-        private Label label18;
+        private Label label1;
         private Panel panel10;
         private Button buttonAddToCart10;
         private Label labelProductPrice10;
         private PictureBox pictureBox10;
         private Label labelProductName10;
+        private ComboBox comboBoxSort;
+        private Label label3;
     }
 }
