@@ -147,6 +147,7 @@
             Controls.Add(label1);
             DoubleBuffered = true;
             ForeColor = SystemColors.ActiveCaption;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AuthorizationForm";
             StartPosition = FormStartPosition.CenterScreen;

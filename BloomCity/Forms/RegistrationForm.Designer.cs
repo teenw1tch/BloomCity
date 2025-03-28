@@ -195,6 +195,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "RegistrationForm";
             StartPosition = FormStartPosition.CenterScreen;

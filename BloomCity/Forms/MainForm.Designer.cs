@@ -798,6 +798,7 @@
             Controls.Add(buttonProfile);
             Controls.Add(flowLayoutPanelProducts);
             DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;

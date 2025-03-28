@@ -19,6 +19,7 @@ namespace BloomCity.Forms
             Load += MainForm_Load;
             comboBoxSort.SelectedIndexChanged += ComboBoxSort_SelectedIndexChanged;
             comboBoxCategories.SelectedIndexChanged += ComboBoxCategories_SelectedIndexChanged;
+            buttonProfile.Click += buttonProfile_Click;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -175,6 +176,22 @@ namespace BloomCity.Forms
         private void AddToCart(Product product)
         {
             MessageBox.Show($"Товар '{product.Name}' добавлен в корзину.", "Корзина", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void buttonProfile_Click(object sender, EventArgs e)
+        {
+            int userId = GetCurrentUserId();
+
+            var personalAccForm = new PersonalAccForm(userId);
+            personalAccForm.Show();  
+
+            this.Close();
+        }
+
+        private int GetCurrentUserId()
+        {
+
+            return 1; 
         }
     }
 }
