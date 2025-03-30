@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using BloomCity.Models;
 
@@ -17,6 +18,38 @@ namespace BloomCity.Forms
             label3.BackColor = Color.Transparent;
             label4.BackColor = Color.Transparent;
             linkLabelRegistration.BackColor = Color.Transparent;
+            checkBoxShowPassword.BackColor = Color.Transparent;
+
+            textBoxPassword.PasswordChar = '*';
+        }
+
+        private void CheckBoxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxShowPassword.Checked)
+            {
+                textBoxPassword.PasswordChar = '\0'; 
+            }
+            else
+            {
+                textBoxPassword.PasswordChar = '*'; 
+            }
+        }
+
+        private void TextBoxLogin_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@._-";
+            if (!validChars.Contains(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void TextBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Regex.IsMatch(e.KeyChar.ToString(), "[а-яА-Я]"))
+            {
+                e.Handled = true;
+            }
         }
 
         private void linkLabelRegistration_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

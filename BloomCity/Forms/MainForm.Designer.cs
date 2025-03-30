@@ -133,6 +133,7 @@
             buttonCart.TabIndex = 6;
             buttonCart.Text = "Корзина";
             buttonCart.UseVisualStyleBackColor = true;
+            buttonCart.Click += buttonCart_Click;
             // 
             // label2
             // 

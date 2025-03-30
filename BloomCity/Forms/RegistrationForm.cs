@@ -13,6 +13,32 @@ namespace BloomCity.Forms
         public RegistrationForm()
         {
             InitializeComponent();
+            label1.BackColor = Color.Transparent;
+            label2.BackColor = Color.Transparent;
+            label3.BackColor = Color.Transparent;
+            label4.BackColor = Color.Transparent;
+            label5.BackColor = Color.Transparent;
+            label6.BackColor = Color.Transparent;
+            checkBoxShowPassword.BackColor = Color.Transparent;
+
+            textBoxPassword.PasswordChar = '*';
+            textBoxRepeatPassword.PasswordChar = '*';
+
+            checkBoxShowPassword.CheckedChanged += CheckBoxShowPassword_CheckedChanged;
+        }
+
+        private void CheckBoxShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxShowPassword.Checked)
+            {
+                textBoxPassword.PasswordChar = '\0'; 
+                textBoxRepeatPassword.PasswordChar = '\0';
+            }
+            else
+            {
+                textBoxPassword.PasswordChar = '*';
+                textBoxRepeatPassword.PasswordChar = '*';
+            }
         }
 
         private bool IsValidEmail(string email)
@@ -74,7 +100,6 @@ namespace BloomCity.Forms
             this.Close();
         }
 
-
         private void textBoxEmail_KeyPress(object sender, KeyPressEventArgs e)
         {
             char key = e.KeyChar;
@@ -85,7 +110,6 @@ namespace BloomCity.Forms
                 e.Handled = true;
             }
 
-            // Блокируем ввод русских символов
             if (key >= 'а' && key <= 'я' || key >= 'А' && key <= 'Я')
             {
                 e.Handled = true;
@@ -96,7 +120,6 @@ namespace BloomCity.Forms
         {
             char key = e.KeyChar;
 
-            // Разрешаем только русские буквы, пробелы и дефис
             if (!char.IsControl(key) && !((key >= 'А' && key <= 'Я') || (key >= 'а' && key <= 'я') || key == ' ' || key == '-'))
             {
                 e.Handled = true;
@@ -105,7 +128,6 @@ namespace BloomCity.Forms
 
         private void textBoxPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Блокируем русские буквы
             if ((e.KeyChar >= 'А' && e.KeyChar <= 'я') || (e.KeyChar >= 'А' && e.KeyChar <= 'Я'))
             {
                 e.Handled = true;
@@ -114,7 +136,6 @@ namespace BloomCity.Forms
 
         private void textBoxRepeatPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Блокируем русские буквы
             if ((e.KeyChar >= 'А' && e.KeyChar <= 'я') || (e.KeyChar >= 'А' && e.KeyChar <= 'Я'))
             {
                 e.Handled = true;

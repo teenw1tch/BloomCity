@@ -201,5 +201,24 @@ namespace BloomCity.Forms
         {
             return (c >= 'А' && c <= 'Я') || (c >= 'а' && c <= 'я');
         }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            MainForm mainForm = new MainForm();
+            mainForm.Show();
+            this.Close();
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Вы действительно хотите выйти из аккаунта?", "Выход", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                AuthorizationForm authForm = new AuthorizationForm();
+                authForm.Show();
+                this.Close();
+            }
+        }
     }
 }

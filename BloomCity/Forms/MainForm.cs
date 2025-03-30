@@ -1,9 +1,4 @@
 ﻿using BloomCity.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloomCity.Forms
@@ -183,7 +178,7 @@ namespace BloomCity.Forms
             int userId = GetCurrentUserId();
 
             var personalAccForm = new PersonalAccForm(userId);
-            personalAccForm.Show();  
+            personalAccForm.Show();
 
             this.Close();
         }
@@ -191,7 +186,14 @@ namespace BloomCity.Forms
         private int GetCurrentUserId()
         {
 
-            return 1; 
+            return 1;
+        }
+
+        private void buttonCart_Click(object sender, EventArgs e)
+        {
+            var cartForm = new CartForm();
+            cartForm.Show();
+            this.Close();
         }
     }
 }

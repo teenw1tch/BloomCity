@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PersonalAccForm));
             labelWelcome = new Label();
             labelFullName = new Label();
             textBoxFullName = new TextBox();
@@ -46,8 +47,8 @@
             dataGridViewHistory = new DataGridView();
             labelHistory = new Label();
             buttonBack = new Button();
-            button1 = new Button();
-            button2 = new Button();
+            buttonToCart = new Button();
+            buttonExit = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewHistory).BeginInit();
             SuspendLayout();
             // 
@@ -250,28 +251,30 @@
             buttonBack.TabIndex = 10;
             buttonBack.Text = "Вернуться на главную страницу";
             buttonBack.UseVisualStyleBackColor = true;
+            buttonBack.Click += buttonBack_Click;
             // 
-            // button1
+            // buttonToCart
             // 
-            button1.Font = new Font("Verdana", 12F);
-            button1.ForeColor = SystemColors.ActiveCaption;
-            button1.Location = new Point(478, 549);
-            button1.Name = "button1";
-            button1.Size = new Size(242, 68);
-            button1.TabIndex = 11;
-            button1.Text = "Перейти в корзину";
-            button1.UseVisualStyleBackColor = true;
+            buttonToCart.Font = new Font("Verdana", 12F);
+            buttonToCart.ForeColor = SystemColors.ActiveCaption;
+            buttonToCart.Location = new Point(478, 549);
+            buttonToCart.Name = "buttonToCart";
+            buttonToCart.Size = new Size(242, 68);
+            buttonToCart.TabIndex = 11;
+            buttonToCart.Text = "Перейти в корзину";
+            buttonToCart.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // buttonExit
             // 
-            button2.Font = new Font("Verdana", 12F);
-            button2.ForeColor = Color.DarkMagenta;
-            button2.Location = new Point(828, 549);
-            button2.Name = "button2";
-            button2.Size = new Size(242, 68);
-            button2.TabIndex = 12;
-            button2.Text = "Выйти из аккаунта";
-            button2.UseVisualStyleBackColor = true;
+            buttonExit.Font = new Font("Verdana", 12F);
+            buttonExit.ForeColor = Color.DarkMagenta;
+            buttonExit.Location = new Point(828, 549);
+            buttonExit.Name = "buttonExit";
+            buttonExit.Size = new Size(242, 68);
+            buttonExit.TabIndex = 12;
+            buttonExit.Text = "Выйти из аккаунта";
+            buttonExit.UseVisualStyleBackColor = true;
+            buttonExit.Click += buttonExit_Click;
             // 
             // PersonalAccForm
             // 
@@ -280,8 +283,8 @@
             BackgroundImage = Properties.Resources.Background__freepik_;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1136, 629);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(buttonExit);
+            Controls.Add(buttonToCart);
             Controls.Add(buttonBack);
             Controls.Add(labelHistory);
             Controls.Add(dataGridViewHistory);
@@ -303,6 +306,7 @@
             DoubleBuffered = true;
             ForeColor = SystemColors.ActiveCaption;
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PersonalAccForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Личный кабинет";
@@ -331,7 +335,7 @@
         private DataGridView dataGridViewHistory;
         private Label labelHistory;
         private Button buttonBack;
-        private Button button1;
-        private Button button2;
+        private Button buttonToCart;
+        private Button buttonExit;
     }
 }

@@ -37,6 +37,7 @@
             textBoxLogin = new TextBox();
             textBoxPassword = new TextBox();
             buttonLogin = new Button();
+            checkBoxShowPassword = new CheckBox();
             SuspendLayout();
             // 
             // label1
@@ -44,7 +45,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Verdana", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label1.ForeColor = SystemColors.ActiveCaption;
-            label1.Location = new Point(343, 9);
+            label1.Location = new Point(344, 9);
             label1.Name = "label1";
             label1.Size = new Size(479, 34);
             label1.TabIndex = 0;
@@ -55,7 +56,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Verdana", 12F);
             label2.ForeColor = SystemColors.ActiveCaption;
-            label2.Location = new Point(505, 152);
+            label2.Location = new Point(506, 152);
             label2.Name = "label2";
             label2.Size = new Size(155, 25);
             label2.TabIndex = 0;
@@ -66,7 +67,7 @@
             label3.AutoSize = true;
             label3.Font = new Font("Verdana", 12F);
             label3.ForeColor = SystemColors.ActiveCaption;
-            label3.Location = new Point(539, 286);
+            label3.Location = new Point(540, 286);
             label3.Name = "label3";
             label3.Size = new Size(86, 25);
             label3.TabIndex = 0;
@@ -77,7 +78,7 @@
             label4.AutoSize = true;
             label4.Font = new Font("Verdana", 12F);
             label4.ForeColor = SystemColors.ActiveCaption;
-            label4.Location = new Point(412, 565);
+            label4.Location = new Point(413, 565);
             label4.Name = "label4";
             label4.Size = new Size(340, 25);
             label4.TabIndex = 3;
@@ -89,7 +90,7 @@
             linkLabelRegistration.Font = new Font("Verdana", 12F);
             linkLabelRegistration.ForeColor = SystemColors.ActiveCaption;
             linkLabelRegistration.LinkColor = SystemColors.HotTrack;
-            linkLabelRegistration.Location = new Point(468, 590);
+            linkLabelRegistration.Location = new Point(469, 590);
             linkLabelRegistration.Name = "linkLabelRegistration";
             linkLabelRegistration.Size = new Size(228, 25);
             linkLabelRegistration.TabIndex = 4;
@@ -101,27 +102,30 @@
             // 
             textBoxLogin.Font = new Font("Verdana", 12F);
             textBoxLogin.ForeColor = SystemColors.ActiveCaption;
-            textBoxLogin.Location = new Point(411, 180);
+            textBoxLogin.Location = new Point(412, 180);
             textBoxLogin.Multiline = true;
             textBoxLogin.Name = "textBoxLogin";
             textBoxLogin.Size = new Size(343, 44);
             textBoxLogin.TabIndex = 1;
+            textBoxLogin.KeyPress += TextBoxLogin_KeyPress;
             // 
             // textBoxPassword
             // 
             textBoxPassword.Font = new Font("Verdana", 12F);
             textBoxPassword.ForeColor = SystemColors.ActiveCaption;
-            textBoxPassword.Location = new Point(411, 314);
+            textBoxPassword.Location = new Point(412, 314);
             textBoxPassword.Multiline = true;
             textBoxPassword.Name = "textBoxPassword";
+            textBoxPassword.PasswordChar = '*';
             textBoxPassword.Size = new Size(343, 44);
             textBoxPassword.TabIndex = 2;
+            textBoxPassword.KeyPress += TextBoxPassword_KeyPress;
             // 
             // buttonLogin
             // 
             buttonLogin.Font = new Font("Verdana", 12F);
             buttonLogin.ForeColor = SystemColors.ActiveCaption;
-            buttonLogin.Location = new Point(477, 441);
+            buttonLogin.Location = new Point(478, 441);
             buttonLogin.Name = "buttonLogin";
             buttonLogin.Size = new Size(210, 53);
             buttonLogin.TabIndex = 3;
@@ -130,6 +134,18 @@
             buttonLogin.ClientSizeChanged += buttonLogin_Click;
             buttonLogin.Click += buttonLogin_Click;
             // 
+            // checkBoxShowPassword
+            // 
+            checkBoxShowPassword.AutoSize = true;
+            checkBoxShowPassword.Font = new Font("Verdana", 12F);
+            checkBoxShowPassword.Location = new Point(480, 364);
+            checkBoxShowPassword.Name = "checkBoxShowPassword";
+            checkBoxShowPassword.Size = new Size(207, 29);
+            checkBoxShowPassword.TabIndex = 6;
+            checkBoxShowPassword.Text = "Показать пароль";
+            checkBoxShowPassword.UseVisualStyleBackColor = true;
+            checkBoxShowPassword.CheckedChanged += CheckBoxShowPassword_CheckedChanged;
+            // 
             // AuthorizationForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -137,6 +153,7 @@
             BackgroundImage = Properties.Resources.Background__freepik_;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1136, 629);
+            Controls.Add(checkBoxShowPassword);
             Controls.Add(buttonLogin);
             Controls.Add(textBoxPassword);
             Controls.Add(textBoxLogin);
@@ -166,5 +183,6 @@
         private TextBox textBoxLogin;
         private TextBox textBoxPassword;
         private Button buttonLogin;
+        private CheckBox checkBoxShowPassword;
     }
 }
