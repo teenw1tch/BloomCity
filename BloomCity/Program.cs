@@ -16,4 +16,4 @@ namespace BloomCity
             Application.Run(new AuthorizationForm());
         }
     }
-}   
+}

@@ -15,7 +15,7 @@ namespace BloomCity.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite((@"Data Source=C:\Users\teenw\OneDrive\Рабочий стол\BloomCity\BloomCity\BloomCityDB.db"));
+            optionsBuilder.UseSqlite((@"Data Source=E:\диплом\BloomCity\BloomCity\BloomCity\BloomCityDB.db"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,20 +1,46 @@
 ﻿using BloomCity.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace BloomCity.Forms
 {
     public partial class MainForm : Form
     {
+        private List<OrderDetail> cartItems = new List<OrderDetail>();
+        private int currentUserId;
+
+        // Конструктор для первого запуска (без передачи корзины)
         public MainForm()
         {
             InitializeComponent();
+            currentUserId = GetCurrentUserId(); // можно заменить на аргумент, если получаешь из логина
+            InitForm();
+        }
+
+        // Конструктор для возврата из корзины (с передачей userId и корзины)
+        public MainForm(int userId, List<OrderDetail> existingCartItems)
+        {
+            InitializeComponent();
+            currentUserId = userId;
+            cartItems = existingCartItems ?? new List<OrderDetail>();
+            InitForm();
+        }
+
+        private void InitForm()
+        {
             label1.BackColor = Color.Transparent;
             label2.BackColor = Color.Transparent;
             label3.BackColor = Color.Transparent;
+
             Load += MainForm_Load;
             comboBoxSort.SelectedIndexChanged += ComboBoxSort_SelectedIndexChanged;
             comboBoxCategories.SelectedIndexChanged += ComboBoxCategories_SelectedIndexChanged;
             buttonProfile.Click += buttonProfile_Click;
+            buttonCart.Click += buttonCart_Click;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -148,52 +174,57 @@ namespace BloomCity.Forms
 
         private void ComboBoxSort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedCategory = comboBoxCategories.SelectedItem != null
-                ? comboBoxCategories.SelectedItem.ToString()
-                : "Все категории";
-
-            DisplayProducts(comboBoxSort.SelectedItem.ToString(), selectedCategory);
+            var selectedCategory = comboBoxCategories.SelectedItem?.ToString() ?? "Все категории";
+            DisplayProducts(comboBoxSort.SelectedItem?.ToString(), selectedCategory);
         }
 
         private void ComboBoxCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedSort = comboBoxSort.SelectedItem != null
-                ? comboBoxSort.SelectedItem.ToString()
-                : "";
-
-            var selectedCategory = comboBoxCategories.SelectedItem != null
-                ? comboBoxCategories.SelectedItem.ToString()
-                : "Все категории";
-
+            var selectedSort = comboBoxSort.SelectedItem?.ToString() ?? "";
+            var selectedCategory = comboBoxCategories.SelectedItem?.ToString() ?? "Все категории";
             DisplayProducts(selectedSort, selectedCategory);
         }
 
         private void AddToCart(Product product)
         {
+            var existingItem = cartItems.FirstOrDefault(i => i.ProductId == product.Id);
+            if (existingItem != null)
+            {
+                existingItem.Quantity++;
+                existingItem.SubTotal = existingItem.Quantity * product.Price;
+            }
+            else
+            {
+                cartItems.Add(new OrderDetail
+                {
+                    ProductId = product.Id,
+                    Product = product,
+                    Quantity = 1,
+                    SubTotal = product.Price
+                });
+            }
+
             MessageBox.Show($"Товар '{product.Name}' добавлен в корзину.", "Корзина", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void buttonProfile_Click(object sender, EventArgs e)
         {
-            int userId = GetCurrentUserId();
-
-            var personalAccForm = new PersonalAccForm(userId);
+            var personalAccForm = new PersonalAccForm(currentUserId);
             personalAccForm.Show();
+            this.Close();
+        }
 
+        private void buttonCart_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"В корзине {cartItems.Count} позиций."); 
+            var cartForm = new CartForm(currentUserId, cartItems);
+            cartForm.Show();
             this.Close();
         }
 
         private int GetCurrentUserId()
         {
-
-            return 1;
-        }
-
-        private void buttonCart_Click(object sender, EventArgs e)
-        {
-            var cartForm = new CartForm();
-            cartForm.Show();
-            this.Close();
+            return 1; 
         }
     }
 }

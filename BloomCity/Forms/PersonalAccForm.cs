@@ -64,7 +64,7 @@ namespace BloomCity.Forms
                 dataGridViewHistory.DataSource = orders;
 
                 dataGridViewHistory.DefaultCellStyle.Font = new Font("Verdana", 7.8f);
-                dataGridViewHistory.DefaultCellStyle.ForeColor = Color.FromArgb(0, 120, 215);  // Цвет активного окна
+                dataGridViewHistory.DefaultCellStyle.ForeColor = Color.FromArgb(0, 120, 215); 
 
                 dataGridViewHistory.Columns["OrderDetails"].DisplayIndex = 0;
                 dataGridViewHistory.Columns["TotalAmount"].DisplayIndex = 1;
