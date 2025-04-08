@@ -27,11 +27,11 @@ namespace BloomCity.Forms
         {
             if (checkBoxShowPassword.Checked)
             {
-                textBoxPassword.PasswordChar = '\0'; 
+                textBoxPassword.PasswordChar = '\0';
             }
             else
             {
-                textBoxPassword.PasswordChar = '*'; 
+                textBoxPassword.PasswordChar = '*';
             }
         }
 
@@ -73,7 +73,7 @@ namespace BloomCity.Forms
 
             if (user != null)
             {
-                MainForm mainForm = new MainForm();
+                MainForm mainForm = new MainForm(user.Id);  
                 mainForm.Show();
                 this.Hide();
 

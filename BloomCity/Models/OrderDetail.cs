@@ -21,4 +21,9 @@ public class OrderDetail
     public int Quantity { get; set; }
 
     public decimal SubTotal { get; set; }
+
+    public int DeliveryId { get; set; }
+
+    [ForeignKey("DeliveryId")]
+    public Delivery Delivery { get; set; }
 }

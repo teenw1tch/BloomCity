@@ -263,6 +263,7 @@
             buttonToCart.TabIndex = 11;
             buttonToCart.Text = "Перейти в корзину";
             buttonToCart.UseVisualStyleBackColor = true;
+            buttonToCart.Click += buttonToCart_Click;
             // 
             // buttonExit
             // 

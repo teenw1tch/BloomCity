@@ -15,7 +15,7 @@ namespace BloomCity.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite((@"Data Source=E:\диплом\BloomCity\BloomCity\BloomCity\BloomCityDB.db"));
+            optionsBuilder.UseSqlite(@"Data Source=E:\диплом\BloomCity\BloomCity\BloomCity\BloomCityDB.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,20 +24,14 @@ namespace BloomCity.Models
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
-                .WithMany()
+                .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Address)
-                .WithMany()
+                .WithMany(a => a.Orders)
                 .HasForeignKey(o => o.AddressId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.Delivery)
-                .WithMany()
-                .HasForeignKey(o => o.DeliveryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrderDetail>()
@@ -45,6 +39,18 @@ namespace BloomCity.Models
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany(p => p.OrderDetails)
+                .HasForeignKey(od => od.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Delivery)
+                .WithMany(d => d.OrderDetails)
+                .HasForeignKey(od => od.DeliveryId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

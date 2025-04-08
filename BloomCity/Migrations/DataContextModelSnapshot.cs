@@ -91,9 +91,6 @@ namespace BloomCity.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DeliveryId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
 
@@ -107,8 +104,6 @@ namespace BloomCity.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("DeliveryId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
@@ -118,6 +113,9 @@ namespace BloomCity.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DeliveryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("OrderId")
@@ -133,6 +131,8 @@ namespace BloomCity.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeliveryId");
 
                     b.HasIndex("OrderId");
 
@@ -222,32 +222,30 @@ namespace BloomCity.Migrations
             modelBuilder.Entity("Order", b =>
                 {
                     b.HasOne("Address", "Address")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Delivery", "Delivery")
-                        .WithMany()
-                        .HasForeignKey("DeliveryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Address");
 
-                    b.Navigation("Delivery");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("OrderDetail", b =>
                 {
+                    b.HasOne("Delivery", "Delivery")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("DeliveryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -255,10 +253,12 @@ namespace BloomCity.Migrations
                         .IsRequired();
 
                     b.HasOne("Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Delivery");
 
                     b.Navigation("Order");
 
@@ -276,9 +276,19 @@ namespace BloomCity.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Address", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Delivery", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("Order", b =>
@@ -286,9 +296,16 @@ namespace BloomCity.Migrations
                     b.Navigation("OrderDetails");
                 });
 
+            modelBuilder.Entity("Product", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
             modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

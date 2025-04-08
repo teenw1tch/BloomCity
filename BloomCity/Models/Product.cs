@@ -23,4 +23,6 @@ public class Product
     public Category Category { get; set; }
 
     public string ImagePath { get; set; }
+
+    public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

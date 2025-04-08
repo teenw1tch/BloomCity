@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -21,19 +23,41 @@ namespace BloomCity.Forms
             this.CurrentUserId = userId;
             this.CartItems = cartItems ?? new List<OrderDetail>();
             Load += CartForm_Load;
+            SetTransparentLabels();
+        }
+
+        public CartForm(int currentUserId)
+        {
+            InitializeComponent();
+            CurrentUserId = currentUserId;
+            this.CartItems = new List<OrderDetail>();
+            Load += CartForm_Load;
+            SetTransparentLabels();
+        }
+
+        private void SetTransparentLabels()
+        {
+            label1.BackColor = Color.Transparent;
+            label2.BackColor = Color.Transparent;
+            labelSum.BackColor = Color.Transparent;
+            labelAddress.BackColor = Color.Transparent;
+            labelDate.BackColor = Color.Transparent;
+            labelEmail.BackColor = Color.Transparent;
+            labelFullName.BackColor = Color.Transparent;
+            labelPhone.BackColor = Color.Transparent;
+            labelPickAddress.BackColor = Color.Transparent;
         }
 
         private void CartForm_Load(object sender, EventArgs e)
         {
-            dataGridViewCart.DataSource = null;
             dataGridViewCart.AutoGenerateColumns = false;
-
             dataGridViewCart.Columns.Clear();
 
             dataGridViewCart.Columns.Add(new DataGridViewTextBoxColumn
             {
                 DataPropertyName = "ProductName",
-                HeaderText = "Название"
+                HeaderText = "Название",
+                ReadOnly = true
             });
 
             dataGridViewCart.Columns.Add(new DataGridViewTextBoxColumn
@@ -44,53 +68,44 @@ namespace BloomCity.Forms
 
             dataGridViewCart.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "SubTotal",
-                HeaderText = "Сумма"
+                DataPropertyName = "UnitPrice",
+                HeaderText = "Цена единицы",
+                ReadOnly = true
             });
 
-            var displayItems = CartItems.Select(i => new
+            dataGridViewCart.Columns.Add(new DataGridViewTextBoxColumn
             {
-                ProductName = i.Product?.Name ?? "—",
-                Quantity = i.Quantity,
-                SubTotal = i.SubTotal
-            }).ToList();
+                DataPropertyName = "TotalPrice",
+                HeaderText = "Общая стоимость",
+                ReadOnly = true
+            });
 
-            dataGridViewCart.DataSource = displayItems;
-        }
+            comboBoxAddress.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCity.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCity.Items.Clear();
+            comboBoxCity.Items.Add("Воронеж");
+            comboBoxCity.SelectedIndex = 0;
 
-        private void InitializeDataGridView()
-        {
-            dataGridViewCart.ColumnCount = 4;
-            dataGridViewCart.Columns[0].Name = "Название";
-            dataGridViewCart.Columns[1].Name = "Наличие";
-            dataGridViewCart.Columns[2].Name = "Количество";
-            dataGridViewCart.Columns[3].Name = "Общая стоимость";
-
-            dataGridViewCart.Columns[1].Width = 80;
-            dataGridViewCart.Columns[2].Width = 80;
-            dataGridViewCart.Columns[3].Width = 120;
-
-            dataGridViewCart.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewCart.MultiSelect = false;
+            LoadUserData();
+            LoadAddresses();
+            LoadCart();
         }
 
         private void LoadCart()
         {
-            dataGridViewCart.Rows.Clear();
-            decimal totalSum = 0;
+            dataGridViewCart.DataSource = null;
+            dataGridViewCart.DataSource = new BindingSource(new BindingList<CartDisplayItem>(GetDisplayItems()), null);
+            UpdateTotalSum();
+        }
 
-            foreach (var item in CartItems)
+        private List<CartDisplayItem> GetDisplayItems()
+        {
+            return CartItems.Select(i => new CartDisplayItem
             {
-                decimal itemTotal = item.Quantity * item.Product.Price;
-                totalSum += itemTotal;
-
-                dataGridViewCart.Rows.Add(item.Product.Name,
-                                          item.Product.InStock ? "Да" : "Нет",
-                                          item.Quantity,
-                                          itemTotal);
-            }
-
-            labelSum.Text = $"Общая сумма: {totalSum} руб.";
+                ProductName = i.Product?.Name ?? "—",
+                Quantity = i.Quantity,
+                UnitPrice = i.Product?.Price ?? 0
+            }).ToList();
         }
 
         private void LoadUserData()
@@ -102,6 +117,12 @@ namespace BloomCity.Forms
                 maskedTextBoxPhone.Text = user.Phone;
                 textBoxEmail.Text = user.Email;
             }
+
+            var firstAddress = db.Addresses.FirstOrDefault(a => a.UserId == CurrentUserId);
+            if (firstAddress != null)
+            {
+                textBoxPostCode.Text = firstAddress.PostalCode;
+            }
         }
 
         private void LoadAddresses()
@@ -110,76 +131,75 @@ namespace BloomCity.Forms
             comboBoxAddress.DataSource = addresses;
             comboBoxAddress.DisplayMember = "Street";
             comboBoxAddress.ValueMember = "Id";
+
+            comboBoxAddress.SelectedIndexChanged += (s, e) =>
+            {
+                if (comboBoxAddress.SelectedItem is Address selectedAddress)
+                {
+                    textBoxPostCode.Text = selectedAddress.PostalCode;
+                }
+            };
         }
 
         private void UpdateTotalSum()
         {
-            decimal totalSum = dataGridViewCart.Rows.Cast<DataGridViewRow>()
-                .Where(row => row.Cells[3].Value != null)
-                .Sum(row => Convert.ToDecimal(row.Cells[3].Value));
-
-            labelSum.Text = $"Общая сумма: {totalSum} руб.";
+            labelSum.Text = $"Общая сумма: {CartItems.Sum(i => (i.Product?.Price ?? 0) * i.Quantity):0.00} руб.";
         }
 
         private void buttonPlus_Click(object sender, EventArgs e)
         {
             if (dataGridViewCart.SelectedRows.Count == 0) return;
-            var row = dataGridViewCart.SelectedRows[0];
-            string productName = row.Cells[0].Value.ToString();
 
-            int quantity = Convert.ToInt32(row.Cells[2].Value) + 1;
-            row.Cells[2].Value = quantity;
-            row.Cells[3].Value = quantity * GetPrice(productName);
-
-            var item = CartItems.FirstOrDefault(i => i.Product.Name == productName);
-            if (item != null) item.Quantity = quantity;
-
-            UpdateTotalSum();
+            string productName = dataGridViewCart.SelectedRows[0].Cells[0].Value.ToString();
+            var item = CartItems.FirstOrDefault(i => i.Product?.Name == productName);
+            if (item != null)
+            {
+                item.Quantity++;
+                LoadCart();
+            }
         }
 
         private void buttonMinus_Click(object sender, EventArgs e)
         {
             if (dataGridViewCart.SelectedRows.Count == 0) return;
-            var row = dataGridViewCart.SelectedRows[0];
-            string productName = row.Cells[0].Value.ToString();
-            int quantity = Convert.ToInt32(row.Cells[2].Value);
 
-            var item = CartItems.FirstOrDefault(i => i.Product.Name == productName);
-
-            if (quantity > 1)
+            string productName = dataGridViewCart.SelectedRows[0].Cells[0].Value.ToString();
+            var item = CartItems.FirstOrDefault(i => i.Product?.Name == productName);
+            if (item != null)
             {
-                row.Cells[2].Value = --quantity;
-                row.Cells[3].Value = quantity * GetPrice(productName);
-                if (item != null) item.Quantity = quantity;
+                if (item.Quantity > 1)
+                {
+                    item.Quantity--;
+                }
+                else
+                {
+                    CartItems.Remove(item);
+                }
+                LoadCart();
             }
-            else
-            {
-                dataGridViewCart.Rows.Remove(row);
-                if (item != null) CartItems.Remove(item);
-            }
-
-            UpdateTotalSum();
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCart.SelectedRows.Count > 0)
+            if (dataGridViewCart.SelectedRows.Count == 0) return;
+
+            string productName = dataGridViewCart.SelectedRows[0].Cells[0].Value.ToString();
+            var item = CartItems.FirstOrDefault(i => i.Product?.Name == productName);
+            if (item != null)
             {
-                string productName = dataGridViewCart.SelectedRows[0].Cells[0].Value.ToString();
-                dataGridViewCart.Rows.Remove(dataGridViewCart.SelectedRows[0]);
-
-                var item = CartItems.FirstOrDefault(i => i.Product.Name == productName);
-                if (item != null) CartItems.Remove(item);
-
-                UpdateTotalSum();
+                CartItems.Remove(item);
+                LoadCart();
             }
         }
 
         private void buttonDeleteAll_Click(object sender, EventArgs e)
         {
-            dataGridViewCart.Rows.Clear();
-            CartItems.Clear();
-            labelSum.Text = "Общая сумма: 0 руб.";
+            var confirm = MessageBox.Show("Удалить все товары из корзины?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm == DialogResult.Yes)
+            {
+                CartItems.Clear();
+                LoadCart();
+            }
         }
 
         private void buttonBuy_Click(object sender, EventArgs e)
@@ -187,8 +207,9 @@ namespace BloomCity.Forms
             if (string.IsNullOrWhiteSpace(textBoxFullName.Text) ||
                 string.IsNullOrWhiteSpace(maskedTextBoxPhone.Text) ||
                 string.IsNullOrWhiteSpace(textBoxEmail.Text) ||
-                (string.IsNullOrWhiteSpace(textBoxAddress.Text) && comboBoxAddress.SelectedItem == null) ||
-                dataGridViewCart.Rows.Count == 0)
+                (string.IsNullOrWhiteSpace(textBoxStreet.Text) && comboBoxAddress.SelectedItem == null) ||
+                string.IsNullOrWhiteSpace(textBoxPostCode.Text) ||
+                CartItems.Count == 0)
             {
                 MessageBox.Show("Заполните все поля и добавьте товары в корзину!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -200,14 +221,28 @@ namespace BloomCity.Forms
                 return;
             }
 
-            string selectedAddress = !string.IsNullOrWhiteSpace(textBoxAddress.Text)
-                ? textBoxAddress.Text
+            string selectedAddress = !string.IsNullOrWhiteSpace(textBoxStreet.Text)
+                ? textBoxStreet.Text
                 : comboBoxAddress.Text;
 
             var address = db.Addresses.FirstOrDefault(a => a.Street == selectedAddress);
+
+            if (address == null && !string.IsNullOrWhiteSpace(textBoxStreet.Text))
+            {
+                address = new Address
+                {
+                    Street = textBoxStreet.Text,
+                    City = comboBoxCity.SelectedItem?.ToString() ?? "Воронеж",
+                    PostalCode = textBoxPostCode.Text,
+                    UserId = CurrentUserId
+                };
+                db.Addresses.Add(address);
+                db.SaveChanges();
+            }
+
             if (address == null)
             {
-                MessageBox.Show("Выбранный адрес не найден в базе данных!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Выбранный адрес не найден и не был создан!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -225,30 +260,32 @@ namespace BloomCity.Forms
             {
                 UserId = CurrentUserId,
                 OrderDate = DateTime.Now,
-                TotalAmount = GetTotalSum(),
-                AddressId = address.Id,
-                DeliveryId = delivery.Id
+                TotalAmount = CartItems.Sum(i => (i.Product?.Price ?? 0) * i.Quantity),
+                AddressId = address.Id
             };
 
             db.Orders.Add(newOrder);
             db.SaveChanges();
 
+            foreach (var cartItem in CartItems)
+            {
+                var orderDetail = new OrderDetail
+                {
+                    OrderId = newOrder.Id,
+                    ProductId = cartItem.Product?.Id ?? 0,
+                    Quantity = cartItem.Quantity,
+                    SubTotal = (cartItem.Product?.Price ?? 0) * cartItem.Quantity,
+                    DeliveryId = delivery.Id
+                };
+
+                db.OrderDetails.Add(orderDetail);
+            }
+
+            db.SaveChanges();
+
             MessageBox.Show("Ваш заказ принят!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            dataGridViewCart.Rows.Clear();
             CartItems.Clear();
-            labelSum.Text = "Общая сумма: 0 руб.";
-        }
-
-        private decimal GetPrice(string productName)
-        {
-            return db.Products.FirstOrDefault(p => p.Name == productName)?.Price ?? 0;
-        }
-
-        private decimal GetTotalSum()
-        {
-            return dataGridViewCart.Rows.Cast<DataGridViewRow>()
-                .Where(row => row.Cells[3].Value != null)
-                .Sum(row => Convert.ToDecimal(row.Cells[3].Value));
+            LoadCart();
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
@@ -256,6 +293,14 @@ namespace BloomCity.Forms
             var mainForm = new MainForm(CurrentUserId, CartItems);
             mainForm.Show();
             this.Close();
+        }
+
+        private class CartDisplayItem
+        {
+            public string ProductName { get; set; }
+            public int Quantity { get; set; }
+            public decimal UnitPrice { get; set; }
+            public decimal TotalPrice => Quantity * UnitPrice;
         }
     }
 }

@@ -13,15 +13,16 @@ namespace BloomCity.Forms
         private List<OrderDetail> cartItems = new List<OrderDetail>();
         private int currentUserId;
 
-        // Конструктор для первого запуска (без передачи корзины)
-        public MainForm()
+        public MainForm(int userId)
         {
             InitializeComponent();
-            currentUserId = GetCurrentUserId(); // можно заменить на аргумент, если получаешь из логина
+            currentUserId = userId;
             InitForm();
+            label1.BackColor = Color.Transparent;
+            label2.BackColor = Color.Transparent;
+            label3.BackColor = Color.Transparent;
         }
 
-        // Конструктор для возврата из корзины (с передачей userId и корзины)
         public MainForm(int userId, List<OrderDetail> existingCartItems)
         {
             InitializeComponent();
@@ -41,12 +42,12 @@ namespace BloomCity.Forms
             comboBoxCategories.SelectedIndexChanged += ComboBoxCategories_SelectedIndexChanged;
             buttonProfile.Click += buttonProfile_Click;
             buttonCart.Click += buttonCart_Click;
+            textBoxSearch.TextChanged += TextBoxSearch_TextChanged;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            comboBoxSort.Items.AddRange(new string[]
-            {
+            comboBoxSort.Items.AddRange(new string[] {
                 "Цена: по возрастанию",
                 "Цена: по убыванию",
                 "Название: А-Я",
@@ -82,7 +83,7 @@ namespace BloomCity.Forms
             }
         }
 
-        private void DisplayProducts(string sortBy = "", string category = "Все категории")
+        private void DisplayProducts(string sortBy = "", string category = "Все категории", string searchTerm = "")
         {
             flowLayoutPanelProducts.Controls.Clear();
             flowLayoutPanelProducts.BackColor = Color.LavenderBlush;
@@ -93,6 +94,13 @@ namespace BloomCity.Forms
             {
                 products = products
                     .Where(p => p.Category != null && p.Category.Name == category)
+                    .ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                products = products
+                    .Where(p => p.Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
                     .ToList();
             }
 
@@ -175,14 +183,24 @@ namespace BloomCity.Forms
         private void ComboBoxSort_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedCategory = comboBoxCategories.SelectedItem?.ToString() ?? "Все категории";
-            DisplayProducts(comboBoxSort.SelectedItem?.ToString(), selectedCategory);
+            string searchTerm = textBoxSearch.Text.Trim();
+            DisplayProducts(comboBoxSort.SelectedItem?.ToString(), selectedCategory, searchTerm);
         }
 
         private void ComboBoxCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedSort = comboBoxSort.SelectedItem?.ToString() ?? "";
             var selectedCategory = comboBoxCategories.SelectedItem?.ToString() ?? "Все категории";
-            DisplayProducts(selectedSort, selectedCategory);
+            string searchTerm = textBoxSearch.Text.Trim();
+            DisplayProducts(selectedSort, selectedCategory, searchTerm);
+        }
+
+        private void TextBoxSearch_TextChanged(object sender, EventArgs e)  // ← обработчик изменения текста
+        {
+            var selectedSort = comboBoxSort.SelectedItem?.ToString() ?? "";
+            var selectedCategory = comboBoxCategories.SelectedItem?.ToString() ?? "Все категории";
+            string searchTerm = textBoxSearch.Text.Trim();
+            DisplayProducts(selectedSort, selectedCategory, searchTerm);
         }
 
         private void AddToCart(Product product)
@@ -216,15 +234,22 @@ namespace BloomCity.Forms
 
         private void buttonCart_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"В корзине {cartItems.Count} позиций."); 
-            var cartForm = new CartForm(currentUserId, cartItems);
-            cartForm.Show();
+            var cartForm = Application.OpenForms.OfType<CartForm>().FirstOrDefault();
+            if (cartForm == null)
+            {
+                cartForm = new CartForm(currentUserId, cartItems);
+                cartForm.Show();
+            }
+            else
+            {
+                cartForm.Focus();
+            }
             this.Close();
         }
 
         private int GetCurrentUserId()
         {
-            return 1; 
+            return 1;
         }
     }
 }

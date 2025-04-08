@@ -1,5 +1,5 @@
-﻿    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 public class User
@@ -23,4 +23,6 @@ public class User
     public decimal TotalSpent { get; set; }
 
     public List<Address> Addresses { get; set; } = new List<Address>();
+
+    public List<Order> Orders { get; set; } = new List<Order>();
 }

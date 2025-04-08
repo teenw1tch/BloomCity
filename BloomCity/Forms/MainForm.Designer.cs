@@ -32,8 +32,7 @@
             buttonProfile = new Button();
             buttonCart = new Button();
             label2 = new Label();
-            textBoxPhone = new TextBox();
-            buttonSearch = new Button();
+            textBoxSearch = new TextBox();
             flowLayoutPanelProducts = new FlowLayoutPanel();
             panel1 = new Panel();
             buttonAddToCart1 = new Button();
@@ -140,30 +139,22 @@
             label2.AutoSize = true;
             label2.Font = new Font("Verdana", 12F);
             label2.ForeColor = SystemColors.ActiveCaption;
-            label2.Location = new Point(370, 9);
+            label2.Location = new Point(407, 12);
             label2.Name = "label2";
             label2.Size = new Size(84, 25);
             label2.TabIndex = 8;
             label2.Text = "Поиск:";
             // 
-            // textBoxPhone
+            // textBoxSearch
             // 
-            textBoxPhone.Font = new Font("Verdana", 7.8F);
-            textBoxPhone.ForeColor = SystemColors.ActiveCaption;
-            textBoxPhone.Location = new Point(460, 9);
-            textBoxPhone.Multiline = true;
-            textBoxPhone.Name = "textBoxPhone";
-            textBoxPhone.Size = new Size(265, 26);
-            textBoxPhone.TabIndex = 9;
-            // 
-            // buttonSearch
-            // 
-            buttonSearch.Image = Properties.Resources.SearchIcon1;
-            buttonSearch.Location = new Point(731, 1);
-            buttonSearch.Name = "buttonSearch";
-            buttonSearch.Size = new Size(47, 44);
-            buttonSearch.TabIndex = 10;
-            buttonSearch.UseVisualStyleBackColor = true;
+            textBoxSearch.Font = new Font("Verdana", 7.8F);
+            textBoxSearch.ForeColor = SystemColors.ActiveCaption;
+            textBoxSearch.Location = new Point(497, 12);
+            textBoxSearch.Multiline = true;
+            textBoxSearch.Name = "textBoxSearch";
+            textBoxSearch.Size = new Size(265, 26);
+            textBoxSearch.TabIndex = 9;
+            textBoxSearch.TextChanged += TextBoxSearch_TextChanged;
             // 
             // flowLayoutPanelProducts
             // 
@@ -792,8 +783,7 @@
             Controls.Add(comboBoxSort);
             Controls.Add(label1);
             Controls.Add(comboBoxCategories);
-            Controls.Add(buttonSearch);
-            Controls.Add(textBoxPhone);
+            Controls.Add(textBoxSearch);
             Controls.Add(label2);
             Controls.Add(buttonCart);
             Controls.Add(buttonProfile);
@@ -844,8 +834,7 @@
         private Button buttonProfile;
         private Button buttonCart;
         private Label label2;
-        private TextBox textBoxPhone;
-        private Button buttonSearch;
+        private TextBox textBoxSearch;
         private FlowLayoutPanel flowLayoutPanelProducts;
         private ComboBox comboBoxCategories;
         private Panel panel2;

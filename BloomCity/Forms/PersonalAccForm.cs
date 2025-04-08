@@ -53,30 +53,32 @@ namespace BloomCity.Forms
                     .Where(o => o.UserId == currentUserId)
                     .Select(o => new
                     {
-                        OrderDetails = string.Join(", ", o.OrderDetails.Select(od => od.Product.Name + " (" + od.Quantity + " шт.)")),
+                        OrderDetails = string.Join(", ", o.OrderDetails
+                            .Select(od => od.Product.Name + " (" + od.Quantity + " шт.)")
+                            .ToArray()),
                         o.TotalAmount,
                         o.OrderDate,
                         DeliveryAddress = o.Address.Street + ", " + o.Address.City + ", " + o.Address.PostalCode,
-                        o.Delivery.Status
+                        DeliveryStatus = o.OrderDetails.Any() ? o.OrderDetails.FirstOrDefault().Delivery.Status : "Не определено" // Получаем статус доставки через OrderDetail
                     })
                     .ToList();
 
                 dataGridViewHistory.DataSource = orders;
 
                 dataGridViewHistory.DefaultCellStyle.Font = new Font("Verdana", 7.8f);
-                dataGridViewHistory.DefaultCellStyle.ForeColor = Color.FromArgb(0, 120, 215); 
+                dataGridViewHistory.DefaultCellStyle.ForeColor = Color.FromArgb(0, 120, 215);
 
                 dataGridViewHistory.Columns["OrderDetails"].DisplayIndex = 0;
                 dataGridViewHistory.Columns["TotalAmount"].DisplayIndex = 1;
                 dataGridViewHistory.Columns["OrderDate"].DisplayIndex = 2;
                 dataGridViewHistory.Columns["DeliveryAddress"].DisplayIndex = 3;
-                dataGridViewHistory.Columns["Status"].DisplayIndex = 4;
+                dataGridViewHistory.Columns["DeliveryStatus"].DisplayIndex = 4;
 
                 dataGridViewHistory.Columns["OrderDetails"].HeaderText = "Состав заказа";
                 dataGridViewHistory.Columns["TotalAmount"].HeaderText = "Сумма заказа";
                 dataGridViewHistory.Columns["OrderDate"].HeaderText = "Дата заказа";
                 dataGridViewHistory.Columns["DeliveryAddress"].HeaderText = "Адрес доставки";
-                dataGridViewHistory.Columns["Status"].HeaderText = "Статус заказа";
+                dataGridViewHistory.Columns["DeliveryStatus"].HeaderText = "Статус доставки";
             }
         }
 
@@ -204,10 +206,11 @@ namespace BloomCity.Forms
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            MainForm mainForm = new MainForm();
+            MainForm mainForm = new MainForm(currentUserId);
             mainForm.Show();
             this.Close();
         }
+
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
@@ -219,6 +222,13 @@ namespace BloomCity.Forms
                 authForm.Show();
                 this.Close();
             }
+        }
+
+        private void buttonToCart_Click(object sender, EventArgs e)
+        {
+            var CartForm = new CartForm(currentUserId);
+            CartForm.Show();
+            this.Close();
         }
     }
 }

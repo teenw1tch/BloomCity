@@ -46,11 +46,15 @@
             textBoxFullName = new TextBox();
             labelFullName = new Label();
             labelAddress = new Label();
-            textBoxAddress = new TextBox();
+            textBoxStreet = new TextBox();
             labelPickAddress = new Label();
             comboBoxAddress = new ComboBox();
             dateTimePicker = new DateTimePicker();
             labelDate = new Label();
+            comboBoxCity = new ComboBox();
+            label3 = new Label();
+            label4 = new Label();
+            textBoxPostCode = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCart).BeginInit();
             SuspendLayout();
             // 
@@ -85,6 +89,7 @@
             buttonBack.TabIndex = 11;
             buttonBack.Text = "Вернуться на главную страницу";
             buttonBack.UseVisualStyleBackColor = true;
+            buttonBack.Click += buttonBack_Click;
             // 
             // buttonBuy
             // 
@@ -162,7 +167,7 @@
             labelSum.AutoSize = true;
             labelSum.Font = new Font("Verdana", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             labelSum.ForeColor = SystemColors.ActiveCaption;
-            labelSum.Location = new Point(781, 249);
+            labelSum.Location = new Point(674, 244);
             labelSum.Name = "labelSum";
             labelSum.Size = new Size(181, 34);
             labelSum.TabIndex = 18;
@@ -236,28 +241,28 @@
             labelAddress.AutoSize = true;
             labelAddress.Font = new Font("Verdana", 12F);
             labelAddress.ForeColor = SystemColors.ActiveCaption;
-            labelAddress.Location = new Point(13, 486);
+            labelAddress.Location = new Point(19, 485);
             labelAddress.Name = "labelAddress";
-            labelAddress.Size = new Size(352, 25);
+            labelAddress.Size = new Size(329, 25);
             labelAddress.TabIndex = 30;
-            labelAddress.Text = "Укажите полный адрес доставки";
+            labelAddress.Text = "Укажите улицу, дом, квартиру";
             // 
-            // textBoxAddress
+            // textBoxStreet
             // 
-            textBoxAddress.Font = new Font("Verdana", 12F);
-            textBoxAddress.ForeColor = SystemColors.ActiveCaption;
-            textBoxAddress.Location = new Point(13, 513);
-            textBoxAddress.Multiline = true;
-            textBoxAddress.Name = "textBoxAddress";
-            textBoxAddress.Size = new Size(343, 44);
-            textBoxAddress.TabIndex = 31;
+            textBoxStreet.Font = new Font("Verdana", 12F);
+            textBoxStreet.ForeColor = SystemColors.ActiveCaption;
+            textBoxStreet.Location = new Point(13, 513);
+            textBoxStreet.Multiline = true;
+            textBoxStreet.Name = "textBoxStreet";
+            textBoxStreet.Size = new Size(343, 44);
+            textBoxStreet.TabIndex = 31;
             // 
             // labelPickAddress
             // 
             labelPickAddress.AutoSize = true;
             labelPickAddress.Font = new Font("Verdana", 12F);
             labelPickAddress.ForeColor = SystemColors.ActiveCaption;
-            labelPickAddress.Location = new Point(371, 461);
+            labelPickAddress.Location = new Point(382, 472);
             labelPickAddress.Name = "labelPickAddress";
             labelPickAddress.Size = new Size(302, 50);
             labelPickAddress.TabIndex = 32;
@@ -269,7 +274,7 @@
             comboBoxAddress.Font = new Font("Verdana", 12F);
             comboBoxAddress.ForeColor = SystemColors.ActiveCaption;
             comboBoxAddress.FormattingEnabled = true;
-            comboBoxAddress.Location = new Point(361, 519);
+            comboBoxAddress.Location = new Point(361, 524);
             comboBoxAddress.Name = "comboBoxAddress";
             comboBoxAddress.Size = new Size(344, 33);
             comboBoxAddress.TabIndex = 33;
@@ -279,9 +284,9 @@
             dateTimePicker.CalendarForeColor = SystemColors.ActiveCaption;
             dateTimePicker.CalendarTitleForeColor = SystemColors.ActiveCaption;
             dateTimePicker.Font = new Font("Verdana", 12F);
-            dateTimePicker.Location = new Point(368, 379);
+            dateTimePicker.Location = new Point(362, 440);
             dateTimePicker.Name = "dateTimePicker";
-            dateTimePicker.Size = new Size(317, 32);
+            dateTimePicker.Size = new Size(344, 32);
             dateTimePicker.TabIndex = 34;
             // 
             // labelDate
@@ -289,11 +294,53 @@
             labelDate.AutoSize = true;
             labelDate.Font = new Font("Verdana", 12F);
             labelDate.ForeColor = SystemColors.ActiveCaption;
-            labelDate.Location = new Point(392, 352);
+            labelDate.Location = new Point(406, 413);
             labelDate.Name = "labelDate";
             labelDate.Size = new Size(267, 25);
             labelDate.TabIndex = 35;
             labelDate.Text = "Выберите дату доставки";
+            // 
+            // comboBoxCity
+            // 
+            comboBoxCity.Font = new Font("Verdana", 12F);
+            comboBoxCity.ForeColor = SystemColors.ActiveCaption;
+            comboBoxCity.FormattingEnabled = true;
+            comboBoxCity.Location = new Point(362, 379);
+            comboBoxCity.Name = "comboBoxCity";
+            comboBoxCity.Size = new Size(344, 33);
+            comboBoxCity.TabIndex = 36;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Verdana", 12F);
+            label3.ForeColor = SystemColors.ActiveCaption;
+            label3.Location = new Point(439, 353);
+            label3.Name = "label3";
+            label3.Size = new Size(177, 25);
+            label3.TabIndex = 37;
+            label3.Text = "Выберите город";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Verdana", 12F);
+            label4.ForeColor = SystemColors.ActiveCaption;
+            label4.Location = new Point(415, 281);
+            label4.Name = "label4";
+            label4.Size = new Size(243, 25);
+            label4.TabIndex = 39;
+            label4.Text = "Ваш почтовый индекс";
+            // 
+            // textBoxPostCode
+            // 
+            textBoxPostCode.Font = new Font("Verdana", 12F);
+            textBoxPostCode.ForeColor = SystemColors.ActiveCaption;
+            textBoxPostCode.Location = new Point(361, 306);
+            textBoxPostCode.Multiline = true;
+            textBoxPostCode.Name = "textBoxPostCode";
+            textBoxPostCode.Size = new Size(343, 44);
+            textBoxPostCode.TabIndex = 40;
             // 
             // CartForm
             // 
@@ -302,11 +349,15 @@
             BackgroundImage = Properties.Resources.Background__freepik_;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1136, 629);
+            Controls.Add(textBoxPostCode);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(comboBoxCity);
             Controls.Add(labelDate);
             Controls.Add(dateTimePicker);
             Controls.Add(comboBoxAddress);
             Controls.Add(labelPickAddress);
-            Controls.Add(textBoxAddress);
+            Controls.Add(textBoxStreet);
             Controls.Add(labelAddress);
             Controls.Add(textBoxEmail);
             Controls.Add(labelEmail);
@@ -354,10 +405,14 @@
         private TextBox textBoxFullName;
         private Label labelFullName;
         private Label labelAddress;
-        private TextBox textBoxAddress;
+        private TextBox textBoxStreet;
         private Label labelPickAddress;
         private ComboBox comboBoxAddress;
         private DateTimePicker dateTimePicker;
         private Label labelDate;
+        private ComboBox comboBoxCity;
+        private Label label3;
+        private Label label4;
+        private TextBox textBoxPostCode;
     }
 }

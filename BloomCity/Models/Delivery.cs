@@ -14,4 +14,6 @@ public class Delivery
     public string Status { get; set; }
 
     public DateTime EstimatedDeliveryDate { get; set; }
+
+    public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

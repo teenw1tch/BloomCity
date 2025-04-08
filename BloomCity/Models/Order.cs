@@ -23,10 +23,5 @@ public class Order
     [ForeignKey("AddressId")]
     public Address Address { get; set; }
 
-    public int DeliveryId { get; set; }
-
-    [ForeignKey("DeliveryId")]
-    public Delivery Delivery { get; set; }
-
     public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }
